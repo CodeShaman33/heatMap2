@@ -3,7 +3,6 @@ import numpy as np
 import glob
 import folium
 from folium.plugins import HeatMap
-from folium.plugins import Hexbin
 import tqdm
 
 
@@ -19,6 +18,9 @@ europe_boundaries = {
 # Define the number of hexagons for the grid
 num_hexagons_x = 1111
 num_hexagons_y = 1111
+
+# variable for maximum value 
+max_value = 0
 
 # Calculate the step size for each hexagon
 step_size_lat = (europe_boundaries['max_lat'] - europe_boundaries['min_lat']) / num_hexagons_y
@@ -69,6 +71,7 @@ for csv_file in csv_files:
                 lastPart = data[4][:3]
                 signalQuality = float(row[4][3:5])
                 
+                
                 #position
                 lat = float(data[0] + '.' + data[1])
                 lon = float(data[3] + '.' + lastPart)
@@ -94,7 +97,7 @@ for csv_file in csv_files:
 map_center = [(europe_boundaries['min_lat'] + europe_boundaries['max_lat']) / 2,
               (europe_boundaries['min_lon'] + europe_boundaries['max_lon']) / 2]
 map_zoom = 6
-folium_map = folium.Map(location=map_center, zoom_start=map_zoom, control_scale=True)
+folium_map = folium.Map(location=map_center, zoom_start=map_zoom, control_scale=True, tiles='cartodbpositron')
 
 #creating final table for calculated data
 heat_data = []
@@ -109,6 +112,11 @@ with open('heat_data.txt', 'w') as heatFile:
                 finalValue = 0
             else:
                 finalValue = value/iterations
+                
+                # creating maximum value 
+                if finalValue > max_value:
+                    max_value = finalValue
+                    
             heat_data.append((*coordinate, finalValue))
             if value > 0:
                 heatFile.write('coordinates: ' + str(coordinate) + ' value: '+ str(value) + 'iterations: ' + 
@@ -117,7 +125,9 @@ with open('heat_data.txt', 'w') as heatFile:
             #     print(value)
             #     maxIter += 1
             
-    HeatMap(heat_data).add_to(folium_map)
+    # HeatMap(heat_data).add_to(folium_map)
+    HeatMap(heat_data, radius=12, blur=15, max_zoom=13, max_val=max_value, min_opacity=0.3).add_to(folium_map)
+
 
     # Save the folium map as an HTML file
     folium_map.save('heatmap.html')
