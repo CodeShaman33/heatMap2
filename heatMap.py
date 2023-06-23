@@ -125,8 +125,11 @@ with open('heat_data.txt', 'w') as heatFile:
             #     print(value)
             #     maxIter += 1
             
+
+
+            
     # HeatMap(heat_data).add_to(folium_map)
-    HeatMap(heat_data, radius=12, blur=15, max_zoom=13, max_val=max_value, min_opacity=0.3).add_to(folium_map)
+    HeatMap(heat_data, radius=(18), blur=15, max_zoom=13, max_val=max_value, min_opacity=0.3).add_to(folium_map)
 
 
     # Save the folium map as an HTML file
