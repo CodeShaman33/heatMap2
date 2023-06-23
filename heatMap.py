@@ -118,14 +118,21 @@ with open('heat_data.txt', 'w') as heatFile:
                     max_value = finalValue
                     
             heat_data.append((*coordinate, finalValue))
-            if value > 0:
-                heatFile.write('coordinates: ' + str(coordinate) + ' value: '+ str(value) + 'iterations: ' + 
-                               str(iterations) + str(value) + 'final value: ' + str(finalValue) + '\n')
+            # if value > 0:
+            #     heatFile.write('coordinates: ' + str(coordinate) + ' value: '+ str(value) + 'iterations: ' + 
+            #                    str(iterations) + str(value) + 'final value: ' + str(finalValue) + '\n')
             # if maxIter < 100:
             #     print(value)
             #     maxIter += 1
             
 
+    # Create a fixed color scheme for the markers
+    color_scale = [
+        '#0000FF',  # Blue
+        '#00FF00',  # Green
+        '#FFFF00',  # Yellow
+        '#FF0000'   # Red
+    ]
 
             
     # HeatMap(heat_data).add_to(folium_map)
